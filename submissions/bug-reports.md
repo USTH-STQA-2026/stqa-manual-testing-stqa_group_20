@@ -6,7 +6,7 @@
 
 | Thông tin | |
 |---|---|
-| **Nhóm** | `<!-- Tên nhóm -->` |
+| **Nhóm** | `Group 20` |
 | **Ngày báo cáo** | `<!-- DD/MM/YYYY -->` |
 
 ---
