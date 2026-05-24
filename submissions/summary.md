@@ -90,4 +90,4 @@
 
 | Công cụ AI | Dùng cho phần nào | Bạn đã kiểm tra/chỉnh sửa thế nào |
 |------------|-------------------|-----------------------------------|
-| | | |
+| Claude | Doccuments | Analyze and summarize doccument, search for specific term in doccument faster than  |
