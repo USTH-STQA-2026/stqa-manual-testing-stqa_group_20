@@ -10,36 +10,35 @@
 |-----|----------|
 | **Nhóm** | `Group 20` |
 | **Lớp** | `ICT.1` |
-| **Ngày báo cáo** | `<!-- DD/MM/YYYY -->` |
-| **Hệ thống kiểm thử** | https://stqa.rbc.vn — v1.0 |
-
----
-
+| **Ngày báo cáo** | `25/05/2026` |
 ## 2. Tổng quan kết quả
 
 | Chỉ số | Giá trị |
 |--------|---------|
-| Tổng số test case | `<!-- -->` |
-| Pass | `<!-- -->` |
-| Fail | `<!-- -->` |
-| Blocked | `<!-- -->` |
-| Not Run | `<!-- -->` |
-| **Tỷ lệ Pass** | `<!-- xx% -->` |
-| **Số bug phát hiện** | `<!-- -->` |
+| Tổng số test case | 19 |
+| Pass | 16 |
+| Fail | 3 |
+| Blocked | 0 |
+| Not Run | 0 |
+| **Tỷ lệ Pass** | 84.2% |
+| **Số bug phát hiện** | 4 |
 
 ### Phân bổ theo nhóm chức năng
 
 | Nhóm chức năng | TC | Pass | Fail | Bug | Đánh giá |
 |---------------|-----|------|------|-----|---------|
-| | | | | | |
+| Login (REQ-01) | 5 | 5 | 0 | 0 | Hoạt động hoàn toàn ổn định và trả về đúng thông báo lỗi trong mọi kịch bản đầu vào. |
+| View Book List (REQ-02) | 6 | 6 | 0 | 0 | Giao diện hiển thị trực quan, đồng bộ trạng thái sách thời gian thực chính xác sau khi mượn/trả. |
+| Borrow Books (REQ-04) | 6 | 4 | 2 | 2 | Tồn tại lỗi logic nghiêm trọng cho phép mượn vượt giới hạn 3 sách và hiển thị sai thông báo lỗi cho TV tạm ngưng. |
+| Return Books (REQ-05) | 2 | 1 | 1 | 1 | Trả sách hoạt động bình thường, nhưng khi trả quá hạn hệ thống hoàn toàn không hiển thị cảnh báo trễ hạn. |
 
 ### Phân bổ bug theo mức độ
 
 | Mức độ | Số lượng | Bug IDs |
 |--------|---------|---------|
-| High | | |
-| Medium | | |
-| Low | | |
+| High | 1 | BUG-02 (Cho phép mượn sách thứ 4) |
+| Medium | 3 | BUG-01 (Thủ thư thiếu nút mượn sách hộ), BUG-03 (Không hiện cảnh báo trả quá hạn), BUG-04 (Sai thông báo lỗi TV tạm ngưng) |
+| Low | 0 | — |
 
 ---
 
@@ -47,34 +46,40 @@
 
 | Kỹ thuật | Áp dụng cho REQ nào? | Số TC sử dụng | Giải thích cách áp dụng |
 |----------|---------------------|---------------|------------------------|
-| | | | |
+| EP (Equivalence Partitioning) | REQ-01, REQ-02, REQ-04, REQ-05 | 17 | Phân chia các phân vùng tương đương cho dữ liệu đầu vào hợp lệ/không hợp lệ (VD: trạng thái sách, vai trò tài khoản đăng nhập, trạng thái hoạt động của thành viên). |
+| BVA (Boundary Value Analysis) | REQ-04, REQ-05 | 3 | Kiểm thử tại các giá trị biên quan trọng (VD: cố tình mượn cuốn sách thứ 4 khi đã chạm giới hạn 3 sách tại TC-17; biên thời gian trả sách đúng hạn vs trễ hạn tại TC-19). |
 
 ---
 
 ## 4. Phân tích chất lượng phần mềm
 
 ### 4.1. Điểm mạnh
-`<!-- Liệt kê các chức năng hoạt động tốt -->`
+- Giao diện thân thiện, dễ sử dụng, tốc độ phản hồi cực nhanh do dữ liệu lưu in-memory.
+- Đồng bộ hóa trạng thái sách thời gian thực giữa tab **Sách** và tab **Mượn/Trả** mà không cần tải lại trang.
+- Chức năng đăng nhập phân quyền rõ ràng giữa Thủ thư và Thành viên.
 
 ### 4.2. Điểm yếu
-`<!-- Liệt kê các vấn đề nghiêm trọng -->`
+- Lỗi logic nghiêm trọng trong việc kiểm soát giới hạn mượn sách của Thành viên (BUG-02).
+- Phản hồi thông tin lỗi bị sai lệch cho Thành viên bị tạm ngưng (BUG-04).
+- Hệ thống hoàn toàn bỏ qua việc hiển thị cảnh báo trễ hạn khi Thành viên trả sách quá hạn (BUG-03).
+- Sự không đồng nhất giữa SRS và UI khi vai trò Thủ thư hoàn toàn thiếu tính năng mượn sách hộ cho Thành viên khác (BUG-01).
 
 ---
 
 ## 5. Đề xuất ưu tiên sửa lỗi
 
-> 💡 Đây là phần **Quality Assurance**: bạn không chỉ tìm lỗi mà còn **đề xuất thứ tự ưu tiên** sửa chữa và đánh giá tác động.
-> Nêu rõ tiêu chí ưu tiên: dựa vào **severity** (mức độ nghiêm trọng kỹ thuật) và/hoặc **priority** (mức độ ưu tiên kinh doanh).
-
 | Thứ tự | Bug | Mức độ | Lý do ưu tiên |
 |--------|-----|--------|---------------|
-| | | | |
+| 1 | BUG-02 (Cho mượn vượt giới hạn 3 sách) | High | Đây là lỗi logic kinh doanh nghiêm trọng nhất, làm thất thoát tài nguyên sách của thư viện và vi phạm trực tiếp quy tắc nghiệp vụ cốt lõi. |
+| 2 | BUG-04 (Sai thông báo lỗi cho TV bị tạm ngưng) | Medium | Gây bối rối rất lớn cho người dùng và ảnh hưởng đến trải nghiệm dịch vụ hỗ trợ (tài khoản tạm ngưng lại báo hết hạn). |
+| 3 | BUG-03 (Không hiển thị cảnh báo trả quá hạn) | Medium | Vi phạm quy tắc phản hồi nghiệp vụ của REQ-05 khi có thành viên trả sách quá hạn lâu ngày. |
+| 4 | BUG-01 (Thủ thư thiếu nút mượn hộ) | Medium | Thiếu hụt một phần luồng quy trình làm việc chuẩn của Thủ thư được mô tả trong SRS, cần bổ sung giao diện. |
 
 ---
 
 ## 6. Kết luận
 
-`<!-- Đánh giá tổng thể: Hệ thống có sẵn sàng phát hành không? Tại sao? -->`
+**Hệ thống CHƯA sẵn sàng phát hành (NOT READY FOR RELEASE)**. Mặc dù giao diện và luồng mượn/trả cơ bản chạy mượt mà, nhưng các lỗi logic kinh doanh cốt lõi (BUG-02) và lỗi thiếu/sai cảnh báo nghiệp vụ (BUG-03, BUG-04) là các rào cản lớn. Cần lập tức khắc phục BUG-02 và BUG-03 trước khi cho phép hệ thống triển khai thực tế.
 
 ---
 
