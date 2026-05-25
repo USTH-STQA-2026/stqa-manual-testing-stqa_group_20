@@ -67,11 +67,14 @@
 | Number of books currently borrowed? | < 3 (BVA: 0, 1, 2) | MEM006 (0 books) | Borrowing allowed |
 | | = 3 (BVA: limit) | Member has borrowed 3 books | Rejected, limit exceeded notification |
 
-### IDM — `<!-- Team to fill in for REQ-05 to REQ-08 -->`
+### IDM — Return Books (REQ-05)
 
 | Characteristic | Block | Representative Value | Expected Result |
 |---|---|---|---|
-| `<!-- Team to fill in -->` | | | |
+| Return timing? | On-time | Return date <= due date | Return successful, no alert |
+| | Overdue | Return date > due date | Return successful, overdue warning alert |
+| User authorization? | Own record | Return own book | Allowed |
+| | Other's record | Return someone else's book | Action unavailable (not visible) |
 
 > 💡 **Technical tip**: Use **Equivalence Partitioning (EP)** for discrete partitions, **Boundary Value Analysis (BVA)** for numeric partitions (e.g., the 3-book limit). See textbook §6.1–6.3.
 
@@ -96,6 +99,15 @@
 | TC-10 | Book status updates in real-time immediately after Member borrows — no page refresh required | Logged in as Member (MEM002), currently on the **Books** tab, BOOK001 is in "Available" status | 1. Confirm BOOK001 displays status **"Available"**. 2. Click the **+** button next to BOOK001. 3. Confirmation dialog appears — click **Borrow**. 4. Observe BOOK001's status immediately without refreshing the page. | Book: BOOK001 / Account: `ba.nguyen@email.com` / `password123` | Confirmation dialog: "Do you want to borrow 'Lập trình Flutter cơ bản'?". After confirming: BOOK001 status **immediately changes to "Borrowed"**, notification **"Book borrowed successfully!"** appears. | REQ-02 | EP |
 | TC-11 | Book status updates in real-time immediately after Librarian processes return — no page refresh required | Logged in as Librarian, initial data: BOOK003 is in "Borrowed" status (loan record BR001 of MEM002) | 1. On the **Books** tab: confirm BOOK003 displays **"Borrowed"**. 2. Switch to the **Borrow/Return** tab. 3. Find record BR001 (Kiểm thử phần mềm nhập môn — Borrowed), click the **Return Book** button. 4. Switch back to the **Books** tab, observe BOOK003's status. | Loan record: BR001 / Book: BOOK003 | BR001 changes to status **"Returned"** with the return date recorded. Notification **"Book returned successfully."** appears. On the Books tab: BOOK003 **immediately changes to "Available"** without needing to refresh the page. | REQ-02 | EP |
 
+| TC-12 | Successful Borrowing - Active Member | Logged in as Active Member (`ba.nguyen@email.com`), currently on Books tab, `BOOK001` is "Available", holding < 3 books | 1. Locate book `BOOK001`. 2. Click the **+** (borrow) button. 3. Click **Borrow** on the confirmation dialog. | Book: `BOOK001` / Account: `ba.nguyen@email.com` | Borrowing succeeds. A notification "Book borrowed successfully!" appears. Book status updates to "Borrowed" (or "Currently Borrowed"). A new borrow record is added under "Borrow/Return" tab with a due date 14 days from today. | REQ-04 | EP |
+| TC-13 | Rejection - Borrowing an already borrowed book | Logged in as Active Member (`ba.nguyen@email.com`), currently on Books tab | 1. Locate book `BOOK003` (which is already borrowed in seed data). 2. Observe the action button next to it. | Book: `BOOK003` | The **+** (borrow) button is hidden or disabled for `BOOK003`. The status label displays "Borrowed" (or "Currently Borrowed") and no borrow action can be performed. | REQ-04 | EP |
+| TC-14 | Rejection - Borrowing a lost book | Logged in as Active Member (`ba.nguyen@email.com`), currently on Books tab | 1. Locate book `BOOK007` (which is "Lost" in seed data). 2. Observe the action button next to it. | Book: `BOOK007` | The **+** (borrow) button is hidden or disabled for `BOOK007`. The status label displays "Lost" and no borrow action can be performed. | REQ-04 | EP |
+| TC-15 | Rejection - Suspended Member attempts to borrow | Logged in as Suspended Member (`cu.le@email.com`), currently on Books tab, `BOOK001` is "Available" | 1. Locate book `BOOK001`. 2. Click the **+** (borrow) button. 3. Click **Borrow** on the confirmation dialog. | Book: `BOOK001` / Account: `cu.le@email.com` | Borrowing is rejected. A specific error message appears: "Thành viên đang bị tạm ngưng. Không thể mượn sách." (or "Member is suspended. Cannot borrow book."). Book status remains "Available". | REQ-04 | EP |
+| TC-16 | Rejection - Expired Member attempts to borrow | Logged in as Expired Member (`binh.pham@email.com`), currently on Books tab, `BOOK001` is "Available" | 1. Locate book `BOOK001`. 2. Click the **+** (borrow) button. 3. Click **Borrow** on the confirmation dialog. | Book: `BOOK001` / Account: `binh.pham@email.com` | Borrowing is rejected. A specific error message appears: "Thành viên đã hết hạn. Không thể mượn sách." (or "Member is expired. Cannot borrow book."). Book status remains "Available". | REQ-04 | EP |
+| TC-17 | Rejection - Limit Exceeded (Borrowing 4th book) | Logged in as Active Member (`ba.nguyen@email.com`), currently on Books tab, data in initial state (holds 1 book: `BOOK003` in seed data) | 1. Borrow two available books (e.g., `BOOK001` and `BOOK002`) by clicking **+** and confirming, reaching the limit of 3 books. 2. Locate a 4th available book (e.g., `BOOK005`). 3. Click the **+** (borrow) button next to `BOOK005`. 4. Click **Borrow** on the confirmation dialog. | Books: `BOOK001`, `BOOK002` (to reach limit), then `BOOK005` (4th book) / Account: `ba.nguyen@email.com` | Borrowing of `BOOK005` fails. A specific notification appears: "Đã đạt giới hạn mượn tối đa (3 sách)." (or "Maximum borrow limit reached (3 books)."). Book `BOOK005` status remains "Available". | REQ-04 | BVA |
+| TC-18 | Successful Return - On-Time (No Overdue Alert) | Logged in as Active Member (`ba.nguyen@email.com`), currently has an active, on-time loan for `BOOK001` | 1. Switch to **Borrow/Return** tab. 2. Locate active record for `BOOK001` (within 14-day limit). 3. Click the **Return Book** button next to it. | Book: `BOOK001` / Account: `ba.nguyen@email.com` | Return is processed successfully. Notification "Book returned successfully." appears. The book's status in the list changes to "Returned" with current date. On the Books tab, `BOOK001` status immediately changes to "Available". No overdue alert is shown. | REQ-05 | EP |
+| TC-19 | Successful Return - Overdue Book (Triggers Overdue Warning Alert) | Logged in as Active Member (`ba.nguyen@email.com`), has overdue seed loan record `BR001` | 1. Switch to **Borrow/Return** tab. 2. Locate record `BR001` (`BOOK003` - Overdue). 3. Click the **Return Book** button next to it. | Book: `BOOK003` / Account: `ba.nguyen@email.com` | Return is processed successfully. An **overdue warning alert** is displayed on the screen (e.g., warning that the book was returned late). The loan status updates to "Returned" with return date. On the Books tab, `BOOK003` immediately changes to "Available". | REQ-05 | EP, BVA |
+
 ---
 
 ## Summary
@@ -104,4 +116,6 @@
 |---------------|----------|--------------|----------------------|
 | Login | 5 | REQ-01 | EP |
 | View Book List | 6 | REQ-02 | EP |
-| **Total** | **11** | REQ-01, REQ-02 | EP |
+| Borrow Books | 6 | REQ-04 | EP, BVA |
+| Return Books | 2 | REQ-05 | EP, BVA |
+| **Total** | **19** | REQ-01, REQ-02, REQ-04, REQ-05 | EP, BVA |
