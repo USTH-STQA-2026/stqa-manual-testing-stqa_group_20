@@ -1,98 +1,99 @@
-# Test Summary — Báo cáo tổng hợp kiểm thử
+# Test Summary
 
-> **Hướng dẫn**: Đây là hoạt động **Quality Assurance** — bạn đánh giá chất lượng tổng thể của phần mềm, không chỉ liệt kê lỗi.
+> **Instructions**: This is a **Quality Assurance** activity — you are evaluating the overall quality of the software, not just listing bugs.
 
 ---
 
-## 1. Thông tin nhóm
+## 1. Group Information
 
-| Mục | Thông tin |
+| Item | Information |
 |-----|----------|
-| **Nhóm** | `Group 20` |
-| **Lớp** | `ICT.1` |
-| **Ngày báo cáo** | `25/05/2026` |
-## 2. Tổng quan kết quả
+| **Group** | `Group 20` |
+| **Class** | `ICT.1` |
+| **Report Date** | `25/05/2026` |
 
-| Chỉ số | Giá trị |
+## 2. Overview of Results
+
+| Metric | Value |
 |--------|---------|
-| Tổng số test case | 19 |
+| Total test cases | 19 |
 | Pass | 16 |
 | Fail | 3 |
 | Blocked | 0 |
 | Not Run | 0 |
-| **Tỷ lệ Pass** | 84.2% |
-| **Số bug phát hiện** | 4 |
+| **Pass Rate** | 84.2% |
+| **Number of bugs found** | 4 |
 
-### Phân bổ theo nhóm chức năng
+### Distribution by Feature Group
 
-| Nhóm chức năng | TC | Pass | Fail | Bug | Đánh giá |
+| Feature Group | TC | Pass | Fail | Bug | Assessment |
 |---------------|-----|------|------|-----|---------|
-| Login (REQ-01) | 5 | 5 | 0 | 0 | Hoạt động hoàn toàn ổn định và trả về đúng thông báo lỗi trong mọi kịch bản đầu vào. |
-| View Book List (REQ-02) | 6 | 6 | 0 | 0 | Giao diện hiển thị trực quan, đồng bộ trạng thái sách thời gian thực chính xác sau khi mượn/trả. |
-| Borrow Books (REQ-04) | 6 | 4 | 2 | 2 | Tồn tại lỗi logic nghiêm trọng cho phép mượn vượt giới hạn 3 sách và hiển thị sai thông báo lỗi cho TV tạm ngưng. |
-| Return Books (REQ-05) | 2 | 1 | 1 | 1 | Trả sách hoạt động bình thường, nhưng khi trả quá hạn hệ thống hoàn toàn không hiển thị cảnh báo trễ hạn. |
+| Login (REQ-01) | 5 | 5 | 0 | 0 | Fully stable and returns correct error messages in all input scenarios. |
+| View Book List (REQ-02) | 6 | 6 | 0 | 0 | Intuitive display interface, accurate real-time sync of book status after borrowing/returning. |
+| Borrow Books (REQ-04) | 6 | 4 | 2 | 2 | Critical logic bug allows borrowing beyond the 3-book limit and displays incorrect error messages for suspended members. |
+| Return Books (REQ-05) | 2 | 1 | 1 | 1 | Book return works normally, but when returning overdue books, the system fails to display any overdue warnings. |
 
-### Phân bổ bug theo mức độ
+### Bug Distribution by Severity
 
-| Mức độ | Số lượng | Bug IDs |
+| Severity | Quantity | Bug IDs |
 |--------|---------|---------|
-| High | 1 | BUG-02 (Cho phép mượn sách thứ 4) |
-| Medium | 3 | BUG-01 (Thủ thư thiếu nút mượn sách hộ), BUG-03 (Không hiện cảnh báo trả quá hạn), BUG-04 (Sai thông báo lỗi TV tạm ngưng) |
+| High | 1 | BUG-02 (Allows borrowing the 4th book) |
+| Medium | 3 | BUG-01 (Librarian lacks button to borrow on behalf of members), BUG-03 (Overdue return warning not displayed), BUG-04 (Incorrect error message for suspended members) |
 | Low | 0 | — |
 
 ---
 
-## 3. Kỹ thuật thiết kế đã sử dụng
+## 3. Test Design Techniques Applied
 
-| Kỹ thuật | Áp dụng cho REQ nào? | Số TC sử dụng | Giải thích cách áp dụng |
+| Technique | Applied to which REQ? | Number of TCs Used | Explanation of Application |
 |----------|---------------------|---------------|------------------------|
-| EP (Equivalence Partitioning) | REQ-01, REQ-02, REQ-04, REQ-05 | 17 | Phân chia các phân vùng tương đương cho dữ liệu đầu vào hợp lệ/không hợp lệ (VD: trạng thái sách, vai trò tài khoản đăng nhập, trạng thái hoạt động của thành viên). |
-| BVA (Boundary Value Analysis) | REQ-04, REQ-05 | 3 | Kiểm thử tại các giá trị biên quan trọng (VD: cố tình mượn cuốn sách thứ 4 khi đã chạm giới hạn 3 sách tại TC-17; biên thời gian trả sách đúng hạn vs trễ hạn tại TC-19). |
+| EP (Equivalence Partitioning) | REQ-01, REQ-02, REQ-04, REQ-05 | 17 | Partitioning inputs into valid/invalid equivalence classes (e.g., book status, account roles, member status). |
+| BVA (Boundary Value Analysis) | REQ-04, REQ-05 | 3 | Testing at critical boundary values (e.g., attempting to borrow a 4th book when the limit of 3 books is reached in TC-17; boundary timing of on-time vs. overdue returns in TC-19). |
 
 ---
 
-## 4. Phân tích chất lượng phần mềm
+## 4. Software Quality Analysis
 
-### 4.1. Điểm mạnh
-- Giao diện thân thiện, dễ sử dụng, tốc độ phản hồi cực nhanh do dữ liệu lưu in-memory.
-- Đồng bộ hóa trạng thái sách thời gian thực giữa tab **Sách** và tab **Mượn/Trả** mà không cần tải lại trang.
-- Chức năng đăng nhập phân quyền rõ ràng giữa Thủ thư và Thành viên.
+### 4.1. Strengths
+- User-friendly, easy-to-use interface, extremely fast response time due to in-memory data storage.
+- Real-time synchronization of book status between the **Books** tab and the **Borrow/Return** tab without requiring a page refresh.
+- Clear role-based authorization for login between Librarian and Member roles.
 
-### 4.2. Điểm yếu
-- Lỗi logic nghiêm trọng trong việc kiểm soát giới hạn mượn sách của Thành viên (BUG-02).
-- Phản hồi thông tin lỗi bị sai lệch cho Thành viên bị tạm ngưng (BUG-04).
-- Hệ thống hoàn toàn bỏ qua việc hiển thị cảnh báo trễ hạn khi Thành viên trả sách quá hạn (BUG-03).
-- Sự không đồng nhất giữa SRS và UI khi vai trò Thủ thư hoàn toàn thiếu tính năng mượn sách hộ cho Thành viên khác (BUG-01).
+### 4.2. Weaknesses
+- Critical logic error in enforcing the maximum borrow limit for Members (BUG-02).
+- Mismatched and incorrect error message response for suspended Members (BUG-04).
+- The system completely ignores displaying an overdue warning when a Member returns a book late (BUG-03).
+- Discrepancy between SRS and UI, as the Librarian role lacks the option to borrow books on behalf of other Members (BUG-01).
 
 ---
 
-## 5. Đề xuất ưu tiên sửa lỗi
+## 5. Bug Fixing Priority Recommendations
 
-| Thứ tự | Bug | Mức độ | Lý do ưu tiên |
+| Priority | Bug | Severity | Reason for Priority |
 |--------|-----|--------|---------------|
-| 1 | BUG-02 (Cho mượn vượt giới hạn 3 sách) | High | Đây là lỗi logic kinh doanh nghiêm trọng nhất, làm thất thoát tài nguyên sách của thư viện và vi phạm trực tiếp quy tắc nghiệp vụ cốt lõi. |
-| 2 | BUG-04 (Sai thông báo lỗi cho TV bị tạm ngưng) | Medium | Gây bối rối rất lớn cho người dùng và ảnh hưởng đến trải nghiệm dịch vụ hỗ trợ (tài khoản tạm ngưng lại báo hết hạn). |
-| 3 | BUG-03 (Không hiển thị cảnh báo trả quá hạn) | Medium | Vi phạm quy tắc phản hồi nghiệp vụ của REQ-05 khi có thành viên trả sách quá hạn lâu ngày. |
-| 4 | BUG-01 (Thủ thư thiếu nút mượn hộ) | Medium | Thiếu hụt một phần luồng quy trình làm việc chuẩn của Thủ thư được mô tả trong SRS, cần bổ sung giao diện. |
+| 1 | BUG-02 (Borrowing exceeds the 3-book limit) | High | This is the most critical business logic flaw, risking library book assets and directly violating a core business rule. |
+| 2 | BUG-04 (Incorrect error message for suspended members) | Medium | Causes significant confusion to users and impacts support service experience (suspended account is reported as expired). |
+| 3 | BUG-03 (Fails to display overdue return warning) | Medium | Violates business feedback rules specified in REQ-05 for members returning books past their due dates. |
+| 4 | BUG-01 (Librarian lacks borrow-on-behalf button) | Medium | Missing part of the standard workflow of Librarians described in the SRS, UI needs enhancement. |
 
 ---
 
-## 6. Kết luận
+## 6. Conclusion
 
-**Hệ thống CHƯA sẵn sàng phát hành (NOT READY FOR RELEASE)**. Mặc dù giao diện và luồng mượn/trả cơ bản chạy mượt mà, nhưng các lỗi logic kinh doanh cốt lõi (BUG-02) và lỗi thiếu/sai cảnh báo nghiệp vụ (BUG-03, BUG-04) là các rào cản lớn. Cần lập tức khắc phục BUG-02 và BUG-03 trước khi cho phép hệ thống triển khai thực tế.
-
----
-
-## 7. Bài học rút ra (Tùy chọn)
-
-`<!-- Nhóm bạn học được gì từ quá trình kiểm thử này? -->`
+**The system is NOT READY FOR RELEASE**. Although the interface and basic borrow/return flow work smoothly, critical business logic bugs (BUG-02) and missing/incorrect business warning alerts (BUG-03, BUG-04) are major blockages. BUG-02 and BUG-03 must be resolved immediately before the system can be deployed in production.
 
 ---
 
-## 8. Khai báo sử dụng AI (Tùy chọn)
+## 7. Lessons Learned (Optional)
 
-> Nếu nhóm có sử dụng công cụ AI (ChatGPT, Copilot, Gemini...), hãy ghi rõ bên dưới. Khai báo trung thực **không ảnh hưởng điểm** — đây là kỹ năng minh bạch trong nghề.
+`<!-- What did your group learn from this testing process? -->`
 
-| Công cụ AI | Dùng cho phần nào | Bạn đã kiểm tra/chỉnh sửa thế nào |
+---
+
+## 8. AI Usage Declaration (Optional)
+
+> If the group used AI tools (ChatGPT, Copilot, Gemini...), please declare them below. Honest declarations **do not affect grades** — this is a transparency skill in the industry.
+
+| AI Tool | Component Used For | How You Checked/Edited |
 |------------|-------------------|-----------------------------------|
-| Claude | Doccuments | Analyze and summarize doccument, search for specific term in doccument faster than  |
+| Claude | Documentation | Analyzed and summarized documentation, searched for specific terms in documents faster. |
