@@ -35,19 +35,26 @@
 | TC-17 | Borrow Books | Borrowing fails. A specific notification appears: "Đã đạt giới hạn mượn tối đa (3 sách)." | **Borrowing succeeded.** The member was allowed to borrow a 4th book, and a 4th active loan record was created under their account. | **Fail** | [TC-17 (4th borrow allowed)](../screenshots/TC-17_4th_book_allowed.png) | BUG-02 |
 | TC-18 | Return Books | Return is processed successfully. Notification "Book returned successfully." appears. BOOK001 status changes to "Returned" with current date. On the Books tab, BOOK001 status changes to "Available". | Clicked "Return Book" on a newly borrowed BOOK001. Return processed successfully, notification appeared, book status changed to "Returned", and book immediately returned to "Available" on Books tab. | **Pass** | [TC-18a (before)](../screenshots/TC-18a_active_loan.png) · [TC-18b (after)](../screenshots/TC-18b_return_success.png) | — |
 | TC-19 | Return Books | Return is processed successfully. Overdue warning alert is displayed. Loan status changes to "Returned" with return date. On the Books tab, BOOK003 status changes to "Available". | **Return processed successfully but no overdue warning was displayed.** The book BR001 was returned silently and status updated to "Returned" with return date, but the screen displayed absolutely no overdue alert or warning. | **Fail** | [TC-19 (no alert)](../screenshots/TC-19_return_overdue_no_alert.png) | BUG-03 |
-
+| TC-20 | Search & Filter | Displays all books containing "Flutter" in the title. | Books tab → Typed "Flutter" into search bar → Book "Lập trình Flutter cơ bản" appeared. | **Pass** | [TC-20_Tim_kiem_Flutter.png](../screenshots/TC-20_Tim_kiem_Flutter.png) | — |
+| TC-21 | Search & Filter | Displays books with category "Kinh tế". | Books tab → Typed "Kinh tế" into "Filter by category" bar → System displayed 3 books of "Kinh tế" category. | **Pass** | [TC-21_Loc_Sach_KinhTe.png](../screenshots/TC-21_Loc_Sach_KinhTe.png) | — |
+| TC-22 | Search & Filter | Displays only books by author Nguyễn Minh Đức. | Books tab → Typed "Nguyễn Minh Đức" into search bar → System displayed 2 books of authoe Nguyễn Minh Đức. | **Pass** | [TC-22_Tim_Sach_TacGia.png](../screenshots/TC-22_Tim_Sach_TacGia.png) | — |
+| TC-23 | Search & Filter | Displays message: "No books found". System remains stable. | Books tab → Typed "xyz123abc!!!" into search bar → System displayed message "No books found". | **Pass** | [TC-23_Khong_Tim_Thay.png](../screenshots/TC-23_Khong_Tim_Thay.png) | — |
+| TC-24 | Search & Filter | System filters accurately and displays only BOOK002. | Books tab → Typed "xyz123abc!!!" into search bar → System displayed only book "Cấu trúc dữ liệu và giải thuật" (BOOK002). | **Pass** | [TC-24_Tim_Kiem_100.png](../screenshots/TC-24_Tim_Kiem_100.png) | — |
+| TC-25 | Overdue Processing | Status of record ID BR001 is updated from "Borrowed" to "Overdue". | Borrow/Return tab → All borrow records section → Click "Check overdue books" → Records ID BR001 status went from "Borrowed" to "Overdue" | **Pass** | [TC-25a_Truoc_Khi_Kiem_tra.png](../screenshots/TC-25a_Truoc_Khi_Kiem_tra.png) · [TC-25b_Sau_Khi_Kiem_tra.png](../screenshots/TC-25b_Sau_Khi_Kiem_tra.png) | — |
+| TC-26 | Overdue Processing | Member sees their loan record BR001 clearly displays "Overdue". | Borrow/Return tab → My borrow records section → Record ID BR001 displayed as "Overdue" | **Pass** | [TC-26_thanh_vien_qua_han.png](../screenshots/TC-26_thanh_vien_qua_han.png) | — |
+| TC-27 | Search & Filter | System show "No books found" because no book fit those requirements. | Books tab → Typed "Flutter" into search bar → Typed "Kinh tế" into the filter bar → System displayed 3 books of "Kinh tế" category. | **Fail** | [TC-27.png](../screenshots/TC-27.png) | BUG - 05 |
 ---
 
 ## Results Summary
 
 | Metric | Value |
 |--------|-------|
-| Total test cases | 19 |
-| Pass | 16 |
-| Fail | 3 |
+| Total test cases | 27 |
+| Pass | 23 |
+| Fail | 4 |
 | Blocked | 0 |
 | Not Run | 0 |
-| **Pass Rate** | **84.2%** |
+| **Pass Rate** | **85.2%**  |
 
 ### Results by Feature Group
 
@@ -55,9 +62,11 @@
 |-------|----------|------|------|-----------|
 | Login (REQ-01) | 5 | 5 | 0 | 100% |
 | View Book List (REQ-02) | 6 | 6 | 0 | 100% |
+| Search & Filter (REQ-03) | 6 | 5 | 1 | 83.3% |
 | Borrow Books (REQ-04) | 6 | 4 | 2 | 66.7% |
 | Return Books (REQ-05) | 2 | 1 | 1 | 50.0% |
-| **Total** | **19** | **16** | **3** | **84.2%** |
+| Overdue Processing (REQ-06) | 2 | 2 | 0 | 100% |
+| **Total** | **27** | **23** | **4** | **85.2%** |
 
 ---
 
