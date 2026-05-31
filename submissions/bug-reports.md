@@ -191,4 +191,48 @@ In the return processing logic at the backend/frontend, add a condition check co
 
 ---
 
-<!-- Copy the BUG template above to add BUG-05, BUG-06, ... for each failed TC -->
+## BUG-05
+
+| Attribute | Details |
+|-----------|---------|
+| **Bug ID** | BUG-05 |
+| **Related TC** | `TC-27` |
+| **Related REQ** | `REQ-03` |
+| **Severity** | `High` |
+| **Reporter** | `Dương Minh Đức` |
+| **Date Discovered** | `30/05/2026` |
+| **Status** | `Open` |
+
+**Title:**
+Search results are not combined correctly with the Genre filter (Genre filter overrides Search keyword).
+
+**Environment:**
+- Browser: Chrome 148
+- Operating System: Windows
+- Interface Language: English
+
+**Preconditions:**
+Logged in as a Member account, on the **Books** tab.
+
+**Steps to Reproduce:**
+1. Type a keyword in the Search bar that belongs to a specific genre (e.g., "Flutter", which is in "Technology").
+2. Enter a different, non-matching genre in the Filter bar (e.g., "Economy").
+3. Observe the displayed book list.
+
+**Expected Result:**
+The system should show **"No books found"** because no book in the "Economy" genre has the word "Flutter" in its title. The search and filter should act as an "AND" condition.
+
+**Actual Result:**
+The system displays all books of the "Economy" genre, completely ignoring the "Flutter" keyword in the search bar.
+
+**Impact:**
+Filtering logic is incorrect. Users cannot narrow down search results using genres, making it impossible to find specific books in large categories.
+
+![Search and filter logic failure](../screenshots/TC-27.png)
+
+**Proposed Resolution:**
+Update the search/filter logic in the frontend to ensure both the search keyword and the genre filter are applied simultaneously using a logical `AND` operation.
+
+---
+
+<!-- Copy the BUG template above to add BUG-07, BUG-08, ... for each failed TC -->
