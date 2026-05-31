@@ -52,9 +52,6 @@ Librarians cannot assist members in borrowing books when requested directly at t
 
 ![Librarian interface lacking borrow functionality](../screenshots/TC-11b_muon_tra_tab.png)
 
-**Proposed Resolution:**
-Add a "Tạo phiếu mượn" button or a borrow icon (**+**) on the Librarian interface. When clicked, the system should show a form or dialog prompting for the **Member ID** and perform business validation checks (borrow limit, member status, book status) before creating a new borrow record.
-
 ---
 
 ## BUG-02
@@ -97,9 +94,6 @@ Severely violates the core business rule limiting members to a maximum of 3 book
 
 ![4th book borrowing successfully allowed](../screenshots/TC-17_4th_book_allowed.png)
 
-**Proposed Resolution:**
-In the backend business logic (e.g., `borrowBook` function in `library_service.dart`), verify the borrow limit condition: ensure a `>=` (greater than or equal to) operator is used instead of `>` (greater than): `if (currentBorrowCount >= maxBooksPerMember)`.
-
 ---
 
 ## BUG-04
@@ -140,9 +134,6 @@ The interface displays a rejection message but with the content: **"Thành viên
 Violates the requirement to state the exact reason for borrow rejection in the REQ-04 specification. Causes confusion to users as suspended members might mistake their account status for being expired.
 
 ![Mismatched expired message shown for suspended member](../screenshots/TC-15_suspended_wrong_error.png)
-
-**Proposed Resolution:**
-Check the `borrowBook()` function in the backend. Ensure the member status check logic correctly validates `MemberStatus.suspended` and returns the specific error message "Thành viên đang bị tạm ngưng. Không thể mượn sách." for suspended status before checking the expired status.
 
 ---
 
@@ -186,9 +177,6 @@ Directly violates the core business requirement in REQ-05 (Book Return). The sys
 
 ![Late return completed with no warning dialog alert](../screenshots/TC-19_return_overdue_no_alert.png)
 
-**Proposed Resolution:**
-In the return processing logic at the backend/frontend, add a condition check comparing the actual return date (`returnDate`) and the due date (`dueDate`). If `returnDate > dueDate`, display an Overdue Dialog Alert (cảnh báo quá hạn) either before or along with the successful return notification.
-
 ---
 
 ## BUG-05
@@ -229,9 +217,6 @@ The system displays all books of the "Economy" genre, completely ignoring the "F
 Filtering logic is incorrect. Users cannot narrow down search results using genres, making it impossible to find specific books in large categories.
 
 ![Search and filter logic failure](../screenshots/TC-27.png)
-
-**Proposed Resolution:**
-Update the search/filter logic in the frontend to ensure both the search keyword and the genre filter are applied simultaneously using a logical `AND` operation.
 
 ---
 
