@@ -43,18 +43,25 @@
 | TC-25 | Overdue Processing | Status of record ID BR001 is updated from "Borrowed" to "Overdue". | Borrow/Return tab → All borrow records section → Click "Check overdue books" → Records ID BR001 status went from "Borrowed" to "Overdue" | **Pass** | [TC-25a_Truoc_Khi_Kiem_tra.png](../screenshots/TC-25a_Truoc_Khi_Kiem_tra.png) · [TC-25b_Sau_Khi_Kiem_tra.png](../screenshots/TC-25b_Sau_Khi_Kiem_tra.png) | — |
 | TC-26 | Overdue Processing | Member sees their loan record BR001 clearly displays "Overdue". | Borrow/Return tab → My borrow records section → Record ID BR001 displayed as "Overdue" | **Pass** | [TC-26_thanh_vien_qua_han.png](../screenshots/TC-26_thanh_vien_qua_han.png) | — |
 | TC-27 | Search & Filter | System show "No books found" because no book fit those requirements. | Books tab → Typed "Flutter" into search bar → Typed "Kinh tế" into the filter bar → System displayed 3 books of "Kinh tế" category. | **Fail** | [TC-27.png](../screenshots/TC-27.png) | BUG - 05 |
+| TC-28 | Member Management | Member is created successfully, displays success message "Thêm thành viên thành công! Mã: MEM007" | Members tab → Click "+" (Add member) → Enter full name, unique valid email, phone number → Click "Thêm thành viên" → Member created successfully, displayed success toast message. | **Pass** | [TC-28_success_member.png](../screenshots/TC-28_success_member.png) | — |
+| TC-29 | Member Management | Creation is rejected. Error message appears: "Email không hợp lệ." | Members tab → Click "+" (Add member) → Enter "Test Name One", invalid email "testemail@domain" (no dot in domain), phone number → Click "Thêm thành viên". **Creation succeeded instead of being rejected.** | **Fail** | [TC-29_invalid_email_format.png](../screenshots/TC-29_invalid_email_format.png) | BUG-06 |
+| TC-30 | Member Management | Creation is rejected. A specific error message appears: "Email đã tồn tại." | Members tab → Click "+" (Add member) → Enter "Test Duplicate", duplicate email "ba.nguyen@email.com", phone number → Click "Thêm thành viên". **Creation rejected but with incorrect generic message "Email không hợp lệ" instead of duplicate warning.** | **Fail** | [TC-30_duplicate_email.png](../screenshots/TC-30_duplicate_email.png) | BUG-07 |
+| TC-31 | Member Management | The Members tab is hidden, member cannot access the member management features. | Logged in as Member (MEM002). Verified the tab bar contains only "Sách" and "Mượn / Trả" tabs; the "Thành viên" tab is completely hidden. | **Pass** | [TC-31_member_no_members_tab.png](../screenshots/TC-31_member_no_members_tab.png) | — |
+| TC-32 | Borrow Record Lookup | Librarian can see the complete list of borrow records of all members. | Logged in as Librarian (librarian@library.com) → Switch to "Mượn / Trả" tab → Checked all borrow records section. All records of all members are displayed. | **Pass** | [TC-32_librarian_all_loans.png](../screenshots/TC-32_librarian_all_loans.png) | — |
+| TC-33 | Borrow Record Lookup | Member only sees their own records (e.g. BR001 and BR004). | Logged in as Member (MEM002) → Switch to "Mượn / Trả" tab → Verified "Phiếu mượn của tôi" tab. Only personal records BR001 and BR004 are listed. | **Pass** | [TC-33_member_own_loans.png](../screenshots/TC-33_member_own_loans.png) | — |
+| TC-34 | Borrow Record Lookup | Access is denied or search returns no results, member is blocked from viewing other members' borrow records. | Logged in as Member (MEM002) → Switch to "Mượn / Trả" tab → Click "Tra cứu phiếu mượn" tab → Enter MEM003 → Click "Tra cứu". **Search successfully retrieved and displayed MEM003's borrow records, leaking their private data.** | **Fail** | [TC-34_member_view_others_loans.png](../screenshots/TC-34_member_view_others_loans.png) | BUG-08 |
 ---
 
 ## Results Summary
 
 | Metric | Value |
 |--------|-------|
-| Total test cases | 27 |
-| Pass | 23 |
-| Fail | 4 |
+| Total test cases | 34 |
+| Pass | 27 |
+| Fail | 7 |
 | Blocked | 0 |
 | Not Run | 0 |
-| **Pass Rate** | **85.2%**  |
+| **Pass Rate** | **79.4%**  |
 
 ### Results by Feature Group
 
@@ -66,7 +73,9 @@
 | Borrow Books (REQ-04) | 6 | 4 | 2 | 66.7% |
 | Return Books (REQ-05) | 2 | 1 | 1 | 50.0% |
 | Overdue Processing (REQ-06) | 2 | 2 | 0 | 100% |
-| **Total** | **27** | **23** | **4** | **85.2%** |
+| Member Management (REQ-07) | 4 | 2 | 2 | 50.0% |
+| Borrow Record Lookup (REQ-08) | 3 | 2 | 1 | 66.7% |
+| **Total** | **34** | **27** | **7** | **79.4%** |
 
 ---
 

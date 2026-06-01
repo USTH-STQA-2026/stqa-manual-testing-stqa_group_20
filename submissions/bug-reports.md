@@ -52,9 +52,6 @@ Librarians cannot assist members in borrowing books when requested directly at t
 
 ![Librarian interface lacking borrow functionality](../screenshots/TC-11b_muon_tra_tab.png)
 
-**Proposed Resolution:**
-Add a "Tạo phiếu mượn" button or a borrow icon (**+**) on the Librarian interface. When clicked, the system should show a form or dialog prompting for the **Member ID** and perform business validation checks (borrow limit, member status, book status) before creating a new borrow record.
-
 ---
 
 ## BUG-02
@@ -97,9 +94,6 @@ Severely violates the core business rule limiting members to a maximum of 3 book
 
 ![4th book borrowing successfully allowed](../screenshots/TC-17_4th_book_allowed.png)
 
-**Proposed Resolution:**
-In the backend business logic (e.g., `borrowBook` function in `library_service.dart`), verify the borrow limit condition: ensure a `>=` (greater than or equal to) operator is used instead of `>` (greater than): `if (currentBorrowCount >= maxBooksPerMember)`.
-
 ---
 
 ## BUG-04
@@ -140,9 +134,6 @@ The interface displays a rejection message but with the content: **"Thành viên
 Violates the requirement to state the exact reason for borrow rejection in the REQ-04 specification. Causes confusion to users as suspended members might mistake their account status for being expired.
 
 ![Mismatched expired message shown for suspended member](../screenshots/TC-15_suspended_wrong_error.png)
-
-**Proposed Resolution:**
-Check the `borrowBook()` function in the backend. Ensure the member status check logic correctly validates `MemberStatus.suspended` and returns the specific error message "Thành viên đang bị tạm ngưng. Không thể mượn sách." for suspended status before checking the expired status.
 
 ---
 
@@ -186,9 +177,6 @@ Directly violates the core business requirement in REQ-05 (Book Return). The sys
 
 ![Late return completed with no warning dialog alert](../screenshots/TC-19_return_overdue_no_alert.png)
 
-**Proposed Resolution:**
-In the return processing logic at the backend/frontend, add a condition check comparing the actual return date (`returnDate`) and the due date (`dueDate`). If `returnDate > dueDate`, display an Overdue Dialog Alert (cảnh báo quá hạn) either before or along with the successful return notification.
-
 ---
 
 ## BUG-05
@@ -230,9 +218,133 @@ Filtering logic is incorrect. Users cannot narrow down search results using genr
 
 ![Search and filter logic failure](../screenshots/TC-27.png)
 
-**Proposed Resolution:**
-Update the search/filter logic in the frontend to ensure both the search keyword and the genre filter are applied simultaneously using a logical `AND` operation.
+---
+
+## BUG-06
+
+| Attribute | Details |
+|-----------|---------|
+| **Bug ID** | BUG-06 |
+| **Related TC** | `TC-29` |
+| **Related REQ** | `REQ-07` |
+| **Severity** | `High` |
+| **Reporter** | `Nguyễn Đinh Phú Vinh` |
+| **Date Discovered** | `01/06/2026` |
+| **Status** | `Open` |
+
+**Title:**
+System allows creating a new member with an invalid email address format (missing dot in the domain part), violating REQ-07.
+
+**Environment:**
+- Browser: Chrome 148.0.7778.168
+- Operating System: Windows
+- Interface Language: Tiếng Việt
+
+**Preconditions:**
+Logged in as Librarian (`librarian@library.com`), currently on the **Members** tab.
+
+**Steps to Reproduce:**
+1. Access the website https://stqa.rbc.vn and log in with account: `librarian@library.com` / `admin123`.
+2. Click the tab **Thành viên** (Members).
+3. Click the **+** (Add Member) button on the top AppBar.
+4. Input details: Name: `Test Name One`, Email: `testemail@domain` (note there is no `.` in the domain), Phone: `0987654321`.
+5. Click **Thêm thành viên**.
+
+**Expected Result:**
+The system should validate the email syntax, reject the creation, and display an error message: "Email không hợp lệ."
+
+**Actual Result:**
+The creation succeeded and the system displayed the success message: "Thêm thành viên thành công! Mã: MEM007".
+
+**Impact:**
+Violates the requirement in REQ-07 to reject emails that do not contain a dot in the domain part. Invalid emails will lead to database corruption and communication failures with library members.
+
+![Succeeded to add invalid email](../screenshots/TC-29_invalid_email_format.png)
 
 ---
 
-<!-- Copy the BUG template above to add BUG-07, BUG-08, ... for each failed TC -->
+## BUG-07
+
+| Attribute | Details |
+|-----------|---------|
+| **Bug ID** | BUG-07 |
+| **Related TC** | `TC-30` |
+| **Related REQ** | `REQ-07` |
+| **Severity** | `Medium` |
+| **Reporter** | `Nguyễn Đinh Phú Vinh` |
+| **Date Discovered** | `01/06/2026` |
+| **Status** | `Open` |
+
+**Title:**
+System displays incorrect generic error message "Email không hợp lệ." when attempting to register a duplicate email, instead of indicating the email already exists, violating REQ-07.
+
+**Environment:**
+- Browser: Chrome 148.0.7778.168
+- Operating System: Windows
+- Interface Language: Tiếng Việt
+
+**Preconditions:**
+Logged in as Librarian (`librarian@library.com`), currently on the **Members** tab.
+
+**Steps to Reproduce:**
+1. Access the website https://stqa.rbc.vn and log in with account: `librarian@library.com` / `admin123`.
+2. Click the tab **Thành viên** (Members).
+3. Click the **+** (Add Member) button on the top AppBar.
+4. Input details: Name: `Test Duplicate`, Email: `ba.nguyen@email.com` (which is already assigned to member Nguyễn Học Bá MEM002), Phone: `0987654321`.
+5. Click **Thêm thành viên**.
+
+**Expected Result:**
+The creation is rejected with a specific error message stating that the email already exists (e.g. "Email đã tồn tại.").
+
+**Actual Result:**
+The creation is rejected, but the system displays the incorrect generic error message: "Email không hợp lệ." (Invalid email).
+
+**Impact:**
+Misleading error feedback. Users might think they made a syntax error in the email rather than knowing the email is already in use by another member, which degrades the user experience and violates REQ-07 specification.
+
+![Duplicate email wrong error message](../screenshots/TC-30_duplicate_email.png)
+
+---
+
+## BUG-08
+
+| Attribute | Details |
+|-----------|---------|
+| **Bug ID** | BUG-08 |
+| **Related TC** | `TC-34` |
+| **Related REQ** | `REQ-08` |
+| **Severity** | `High` |
+| **Reporter** | `Nguyễn Đinh Phú Vinh` |
+| **Date Discovered** | `01/06/2026` |
+| **Status** | `Open` |
+
+**Title:**
+Member role can look up and view borrow records of other members, causing a critical data privacy leak, violating REQ-08.
+
+**Environment:**
+- Browser: Chrome 148.0.7778.168
+- Operating System: Windows
+- Interface Language: Tiếng Việt
+
+**Preconditions:**
+Logged in as a Member account (e.g. `ba.nguyen@email.com` / `password123` - MEM002).
+
+**Steps to Reproduce:**
+1. Log in to https://stqa.rbc.vn with Member credentials: `ba.nguyen@email.com` / `password123`.
+2. Click the tab **Mượn / Trả** (Borrow/Return).
+3. Click the inner tab **Tra cứu phiếu mượn** (Borrow record lookup).
+4. Enter another member's ID (e.g., `MEM003` which belongs to Trần Dựa Dẫm) in the search bar.
+5. Click the **Tra cứu** button.
+
+**Expected Result:**
+Access is denied or search returns no results, because members must only be allowed to view their own borrow records and are strictly prohibited from viewing other members' records as defined in REQ-08.
+
+**Actual Result:**
+The search successfully retrieves and displays the borrow records of Trần Dựa Dẫm (MEM003).
+
+**Impact:**
+Critical security and privacy violation. Any registered member can spy on the borrowing habits and records of all other members in the library just by knowing or guessing their member IDs.
+
+![Member data leak lookup](../screenshots/TC-34_member_view_others_loans.png)
+
+---
