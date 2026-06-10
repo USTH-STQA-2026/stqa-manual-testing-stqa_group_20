@@ -9,6 +9,14 @@
 | **Group** | `Group 20` |
 | **Date Reported** | `25/05/2026` |
 
+## Test Environment
+
+| Field | Value |
+|-------|-------|
+| **Browser** | Chrome 148.0.7778.168 |
+| **Operating System** | Windows |
+| **Interface Language** | Tiếng Việt |
+
 ---
 
 ## BUG-01
@@ -25,11 +33,6 @@
 
 **Title:**
 Librarian cannot borrow books for members (missing borrow feature on the Librarian's interface).
-
-**Environment:**
-- Browser: Chrome 148.0.7778.168
-- Operating System: Windows
-- Interface Language: Tiếng Việt
 
 **Preconditions:**
 Logged in as Librarian (`librarian@library.com`), system data in its initial state (seed data).
@@ -52,6 +55,9 @@ Librarians cannot assist members in borrowing books when requested directly at t
 
 ![Librarian interface lacking borrow functionality](../screenshots/TC-11b_muon_tra_tab.png)
 
+**Proposed Solution:**
+Extend the Librarian's interface with a "Mượn sách cho thành viên" feature — a form in the **Mượn / Trả** tab where the Librarian inputs a Member ID and selects an available book to create a borrow record on behalf of that member.
+
 ---
 
 ## BUG-02
@@ -68,11 +74,6 @@ Librarians cannot assist members in borrowing books when requested directly at t
 
 **Title:**
 System allows members to borrow a 4th book, exceeding the maximum limit (3 books) defined in REQ-04.
-
-**Environment:**
-- Browser: Chrome 148.0.7778.168
-- Operating System: Windows
-- Interface Language: Tiếng Việt
 
 **Preconditions:**
 The Member account is already borrowing exactly 3 books (e.g., `ba.nguyen@email.com` is borrowing BOOK001, BOOK002, and BOOK004).
@@ -94,6 +95,9 @@ Severely violates the core business rule limiting members to a maximum of 3 book
 
 ![4th book borrowing successfully allowed](../screenshots/TC-17_4th_book_allowed.png)
 
+**Proposed Solution:**
+Before confirming any borrow request, the system must validate that the requesting member's current active loan count is below the maximum of 3. If the count is already at 3, the request must be rejected immediately with the appropriate error message and no record should be created.
+
 ---
 
 ## BUG-04
@@ -110,11 +114,6 @@ Severely violates the core business rule limiting members to a maximum of 3 book
 
 **Title:**
 System displays incorrect error message when a "Suspended" Member attempts to borrow a book (displays account expired message instead of suspended message).
-
-**Environment:**
-- Browser: Chrome 148.0.7778.168
-- Operating System: Windows
-- Interface Language: Tiếng Việt
 
 **Preconditions:**
 Use a suspended Member account (`cu.le@email.com` / `password123`).
@@ -135,6 +134,9 @@ Violates the requirement to state the exact reason for borrow rejection in the R
 
 ![Mismatched expired message shown for suspended member](../screenshots/TC-15_suspended_wrong_error.png)
 
+**Proposed Solution:**
+The system should maintain distinct error messages for each member account status. When a borrow is blocked due to a **suspended** account, the message must explicitly state "Tạm ngưng"; when blocked due to an **expired** account, it must state "Hết hạn". The two states must not be conflated.
+
 ---
 
 ## BUG-03
@@ -151,11 +153,6 @@ Violates the requirement to state the exact reason for borrow rejection in the R
 
 **Title:**
 Overdue book is returned successfully but the system fails to display any overdue warning as specified in REQ-05.
-
-**Environment:**
-- Browser: Chrome 148.0.7778.168
-- Operating System: Windows
-- Interface Language: Tiếng Việt
 
 **Preconditions:**
 Logged in with member account `ba.nguyen@email.com` / `password123`. The account currently has an active overdue loan record `BR001` (Due Date: 15/09/2024).
@@ -177,6 +174,9 @@ Directly violates the core business requirement in REQ-05 (Book Return). The sys
 
 ![Late return completed with no warning dialog alert](../screenshots/TC-19_return_overdue_no_alert.png)
 
+**Proposed Solution:**
+When a return is processed, the system must compare the return date against the due date. If the return is late, a warning notification showing the number of overdue days must be displayed before or immediately after confirming the return, as required by REQ-05.
+
 ---
 
 ## BUG-05
@@ -194,10 +194,7 @@ Directly violates the core business requirement in REQ-05 (Book Return). The sys
 **Title:**
 Search results are not combined correctly with the Genre filter (Genre filter overrides Search keyword).
 
-**Environment:**
-- Browser: Chrome 148
-- Operating System: Windows
-- Interface Language: English
+> **Environment deviation:** Interface Language: English (differs from global default).
 
 **Preconditions:**
 Logged in as a Member account, on the **Books** tab.
@@ -218,6 +215,9 @@ Filtering logic is incorrect. Users cannot narrow down search results using genr
 
 ![Search and filter logic failure](../screenshots/TC-27.png)
 
+**Proposed Solution:**
+The book search must apply both the keyword and the genre filter simultaneously as an AND condition — the result list should only contain books whose title/author matches the keyword AND whose genre matches the selected filter. The genre filter must not independently override the keyword search.
+
 ---
 
 ## BUG-06
@@ -234,11 +234,6 @@ Filtering logic is incorrect. Users cannot narrow down search results using genr
 
 **Title:**
 System allows creating a new member with an invalid email address format (missing dot in the domain part), violating REQ-07.
-
-**Environment:**
-- Browser: Chrome 148.0.7778.168
-- Operating System: Windows
-- Interface Language: Tiếng Việt
 
 **Preconditions:**
 Logged in as Librarian (`librarian@library.com`), currently on the **Members** tab.
@@ -261,6 +256,9 @@ Violates the requirement in REQ-07 to reject emails that do not contain a dot in
 
 ![Succeeded to add invalid email](../screenshots/TC-29_invalid_email_format.png)
 
+**Proposed Solution:**
+Email validation on the Add Member form must enforce that the domain portion contains at least one dot (e.g., `user@domain.com` is valid; `user@domain` is not). Any submission failing this check must be rejected before the record is created.
+
 ---
 
 ## BUG-07
@@ -277,11 +275,6 @@ Violates the requirement in REQ-07 to reject emails that do not contain a dot in
 
 **Title:**
 System displays incorrect generic error message "Email không hợp lệ." when attempting to register a duplicate email, instead of indicating the email already exists, violating REQ-07.
-
-**Environment:**
-- Browser: Chrome 148.0.7778.168
-- Operating System: Windows
-- Interface Language: Tiếng Việt
 
 **Preconditions:**
 Logged in as Librarian (`librarian@library.com`), currently on the **Members** tab.
@@ -304,6 +297,9 @@ Misleading error feedback. Users might think they made a syntax error in the ema
 
 ![Duplicate email wrong error message](../screenshots/TC-30_duplicate_email.png)
 
+**Proposed Solution:**
+The system should produce two distinct error responses for email input failures: "Email không hợp lệ." for a syntactically invalid format, and a separate message such as "Email đã tồn tại trong hệ thống." for a duplicate conflict. The format-error message must not be reused for the duplicate case.
+
 ---
 
 ## BUG-08
@@ -320,11 +316,6 @@ Misleading error feedback. Users might think they made a syntax error in the ema
 
 **Title:**
 Member role can look up and view borrow records of other members, causing a critical data privacy leak, violating REQ-08.
-
-**Environment:**
-- Browser: Chrome 148.0.7778.168
-- Operating System: Windows
-- Interface Language: Tiếng Việt
 
 **Preconditions:**
 Logged in as a Member account (e.g. `ba.nguyen@email.com` / `password123` - MEM002).
@@ -346,5 +337,8 @@ The search successfully retrieves and displays the borrow records of Trần Dự
 Critical security and privacy violation. Any registered member can spy on the borrowing habits and records of all other members in the library just by knowing or guessing their member IDs.
 
 ![Member data leak lookup](../screenshots/TC-34_member_view_others_loans.png)
+
+**Proposed Solution:**
+The borrow record lookup for the Member role must enforce ownership-based access control — the system should automatically scope all lookup results to the currently authenticated member's own records, regardless of the Member ID entered in the search field. Any query for another member's ID must return no results or show an access-denied message.
 
 ---

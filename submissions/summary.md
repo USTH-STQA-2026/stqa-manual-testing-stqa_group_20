@@ -112,5 +112,4 @@
 |------------|-------------------|-----------------------------------|
 | Claude | Documentation | Analyzed and summarized documentation, searched for specific terms in documents faster. |
 | Gemini | Content Migration & Refinement | Migrated and translated test cases/results from temp files to English, renumbered and aligned TC sequence, and synchronized all summary metrics across the submission files. |
-| Antigravity AI | Testing Automation & Verification | Automated headless browser testing using Chrome DevTools Protocol in PowerShell to execute REQ-07 and REQ-08 test cases, locate UI coordinates, verify validations, and capture evidence screenshots. |
-
+| Antigravity AI |  Verification | Verify validations, and capture evidence screenshots. |
