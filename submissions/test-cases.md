@@ -76,6 +76,27 @@
 | User authorization? | Own record | Return own book | Allowed |
 | | Other's record | Return someone else's book | Action unavailable (not visible) |
 
+### IDM — Member Management (REQ-07)
+
+| Characteristic | Block | Representative Value | Expected Result |
+|---|---|---|---|
+| User Authorization? | Librarian | LIB001 | Allowed to access tab & add member |
+| | Member | MEM002 | Access denied (tab not visible) |
+| Email format valid? | Valid format | `newmember@email.com` | Created successfully |
+| | Invalid (no @) | `newmember.email.com` | Rejected, error message |
+| | Invalid (no dot in domain) | `newmember@email` | Rejected, error message |
+| Email uniqueness? | Unique | `newmember@email.com` | Created successfully |
+| | Duplicate | `ba.nguyen@email.com` | Rejected, error message |
+
+### IDM — Borrow Record Lookup (REQ-08)
+
+| Characteristic | Block | Representative Value | Expected Result |
+|---|---|---|---|
+| User Authorization? | Librarian | LIB001 | Allowed to view all members' records |
+| | Member | MEM002 | Allowed to view only own records |
+| Record access? | Own record | MEM002 looks up MEM002 | Allowed |
+| | Other's record | MEM002 looks up MEM003 | Rejected (unauthorized/hidden) |
+
 > 💡 **Technical tip**: Use **Equivalence Partitioning (EP)** for discrete partitions, **Boundary Value Analysis (BVA)** for numeric partitions (e.g., the 3-book limit). See textbook §6.1–6.3.
 
 ---
@@ -114,6 +135,13 @@
 | TC-25 | Librarian scans and updates status for overdue loans | Logged in as Librarian, system has existing overdue loans. | 1. Go to Librarian's **Borrow/Return** tab. 2. Select **All Loans**. 3. Click **Check Overdue Books** button. | Account: `librarian@library.com` / `admin123`. Target: **BR001** (Due date: 15/09/2024) | Status of record **BR001** is successfully updated from "Borrowed" to "Overdue". | REQ-06 | EP | [TC-25a_Truoc_Khi_Kiem_tra.png](../screenshots/TC-25a_Truoc_Khi_Kiem_tra.png) · [TC-25b_Sau_Khi_Kiem_tra.png](../screenshots/TC-25b_Sau_Khi_Kiem_tra.png) |
 | TC-26 | Verify overdue status visibility for Member account | Librarian has clicked "Check Overdue Books". Logged in as Member (MEM002). | 1. Navigate to **Borrow/Return** tab. 2. Select **My Loans**. | Account: `ba.nguyen@email.com` / `password123` (Owner of BR001) | Member sees their personal loan list and record BR001 clearly displays "Overdue". | REQ-06 | EP | [TC-26_thanh_vien_qua_han.png](../screenshots/TC-26_thanh_vien_qua_han.png) |
 | TC-27 | Filter by category and search combination | Logged in as Member (MEM002), currently on **Books** tab | 1. Enter "Flutter" into the search bar. 2. Enter "Kinh tế" in "Filter by category" | Input search bar: `Flutter`/ Input filter: `Kinh tế` |System show "No books found" because no book fit those requirements | REQ-03 | EP | [TC-27.png](../screenshots/TC-27.png) |
+| TC-28 | Successful Member Creation | Logged in as Librarian, currently on **Members** tab | 1. Click **+** (Add Member) button. 2. Enter full name. 3. Enter unique valid email. 4. Enter phone number. 5. Click **Thêm thành viên**. | Name: `Nguyễn Đinh Phú Vinh`, Email: `phuvinh.new@email.com`, Phone: `0909090909` | Member is created successfully, displays success message "Thêm thành viên thành công! Mã: MEM007" | REQ-07 | EP | [TC-28_success_member.png](../screenshots/TC-28_success_member.png) |
+| TC-29 | Rejection - Add member with invalid email format (missing dot in domain) | Logged in as Librarian, currently on **Members** tab | 1. Click **+** (Add Member) button. 2. Enter full name. 3. Enter email without dot in domain. 4. Enter phone number. 5. Click **Thêm thành viên**. | Name: `Test Name One`, Email: `testemail@domain`, Phone: `0987654321` | Creation is rejected. Error message appears: "Email không hợp lệ." | REQ-07 | EP | [TC-29_invalid_email_format.png](../screenshots/TC-29_invalid_email_format.png) |
+| TC-30 | Rejection - Add member with duplicate email | Logged in as Librarian, currently on **Members** tab | 1. Click **+** (Add Member) button. 2. Enter full name. 3. Enter a duplicate email. 4. Enter phone number. 5. Click **Thêm thành viên**. | Name: `Test Duplicate`, Email: `ba.nguyen@email.com`, Phone: `0987654321` | Creation is rejected. A specific error message appears: "Email đã tồn tại." | REQ-07 | EP | [TC-30_duplicate_email.png](../screenshots/TC-30_duplicate_email.png) |
+| TC-31 | Security - Member account cannot access Member Management | Logged in as Member | 1. Observe the main tab bar. 2. Verify visibility of the **Members** tab. | Account: `ba.nguyen@email.com` | The **Members** tab is hidden, member cannot access the member management features. | REQ-07 | EP | [TC-31_member_no_members_tab.png](../screenshots/TC-31_member_no_members_tab.png) |
+| TC-32 | Librarian views all borrow records | Logged in as Librarian | 1. Go to **Borrow/Return** tab. 2. Verify all borrow records of all members are displayed. | Account: `librarian@library.com` | Librarian can see the complete list of borrow records of all members. | REQ-08 | EP | [TC-32_librarian_all_loans.png](../screenshots/TC-32_librarian_all_loans.png) |
+| TC-33 | Member views own borrow records | Logged in as Member | 1. Go to **Borrow/Return** tab. 2. Verify "My Loans" shows only own borrow records. | Account: `ba.nguyen@email.com` | Member only sees their own records (e.g. BR001 and BR004). | REQ-08 | EP | [TC-33_member_own_loans.png](../screenshots/TC-33_member_own_loans.png) |
+| TC-34 | Security - Member cannot lookup other members' borrow records | Logged in as Member | 1. Go to **Borrow/Return** tab. 2. Click **Tra cứu phiếu mượn** tab. 3. Enter another member's ID. 4. Click **Tra cứu**. | Account: `ba.nguyen@email.com`, Search target: `MEM003` | Access is denied or search returns no results, member is blocked from viewing other members' borrow records. | REQ-08 | EP | [TC-34_member_view_others_loans.png](../screenshots/TC-34_member_view_others_loans.png) |
 
 ---
 
@@ -127,4 +155,6 @@
 | Borrow Books | 6 | REQ-04 | EP, BVA |
 | Return Books | 2 | REQ-05 | EP, BVA |
 | Overdue Processing | 2 | REQ-06 | EP |
-| **Total** | **27** | REQ-01, REQ-02, REQ-03, REQ-04, REQ-05, REQ-06 | EP, BVA |
+| Member Management | 4 | REQ-07 | EP |
+| Borrow Record Lookup | 3 | REQ-08 | EP |
+| **Total** | **34** | REQ-01, REQ-02, REQ-03, REQ-04, REQ-05, REQ-06, REQ-07, REQ-08 | EP, BVA |
