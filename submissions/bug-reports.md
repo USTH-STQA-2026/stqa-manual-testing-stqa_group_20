@@ -24,8 +24,8 @@
 | Attribute | Details |
 |-----------|---------|
 | **Bug ID** | BUG-01 |
-| **Related TC** | `TC- (Librarian's Book Borrowing Process)` |
-| **Related REQ** | `REQ-04 & Overview` |
+| **Related TC** | Exploratory — SRS §1 (role: Thủ thư) / REQ-04 |
+| **Related REQ** | `REQ-04 & SRS §1 (System Overview)` |
 | **Severity** | `Medium` |
 | **Reporter** | `Đỗ Minh Tấn` |
 | **Date Discovered** | `25/05/2026` |
@@ -45,13 +45,15 @@ Logged in as Librarian (`librarian@library.com`), system data in its initial sta
    - Completely lacks any button, icon, or input form for the Librarian to start creating a new borrow transaction for a specific Member ID.
 
 **Expected Result:**
-According to the business specifications in the **SRS - Section 1 (System Overview)**, the Librarian has the authority to **"mượn/trả sách cho thành viên"**. The system must display a borrowing option/button or allow the Librarian to input a Member ID to create a new borrow record for that member.
+According to the business specifications in the **SRS — Section 1 (System Overview)**, the Librarian role is defined to **"mượn/trả sách cho thành viên"** (borrow/return books on behalf of members). The system must display a borrowing option/button or allow the Librarian to input a Member ID to create a new borrow record for that member.
 
 **Actual Result:**
 The Librarian's interface completely lacks the feature or button to borrow books for a member. The Librarian can only process book returns for pre-existing active loans.
 
 **Impact:**
 Librarians cannot assist members in borrowing books when requested directly at the counter, which severely violates the core business requirements described in Section 1 of the SRS.
+
+> **Note:** This defect was found during **exploratory testing** of the Librarian's Mượn / Trả interface rather than from a scripted test case; it traces to the role definition in SRS §1.
 
 ![Librarian interface lacking borrow functionality](../screenshots/TC-11b_muon_tra_tab.png)
 
@@ -65,7 +67,7 @@ Extend the Librarian's interface with a "Mượn sách cho thành viên" feature
 | Attribute | Details |
 |-----------|---------|
 | **Bug ID** | BUG-02 |
-| **Related TC** | `TC-17` |
+| **Related TC** | `TC-23` |
 | **Related REQ** | `REQ-04` |
 | **Severity** | `High` |
 | **Reporter** | `Đỗ Minh Tấn` |
@@ -93,49 +95,10 @@ The borrowing succeeds. The notification "Book borrowed successfully!" is displa
 **Impact:**
 Severely violates the core business rule limiting members to a maximum of 3 books. Members can borrow an unlimited number of books as long as they are available in the library.
 
-![4th book borrowing successfully allowed](../screenshots/TC-17_4th_book_allowed.png)
+![4th book borrowing successfully allowed](../screenshots/TC-23_4th_book_allowed.png)
 
 **Proposed Solution:**
 Before confirming any borrow request, the system must validate that the requesting member's current active loan count is below the maximum of 3. If the count is already at 3, the request must be rejected immediately with the appropriate error message and no record should be created.
-
----
-
-## BUG-04
-
-| Attribute | Details |
-|-----------|---------|
-| **Bug ID** | BUG-04 |
-| **Related TC** | `TC-15` |
-| **Related REQ** | `REQ-04` |
-| **Severity** | `Medium` |
-| **Reporter** | `Đỗ Minh Tấn` |
-| **Date Discovered** | `25/05/2026` |
-| **Status** | `Open` |
-
-**Title:**
-System displays incorrect error message when a "Suspended" Member attempts to borrow a book (displays account expired message instead of suspended message).
-
-**Preconditions:**
-Use a suspended Member account (`cu.le@email.com` / `password123`).
-
-**Steps to Reproduce:**
-1. Log in with account `cu.le@email.com` / `password123`.
-2. On the **Sách** tab, locate an available book (e.g., `BOOK001`).
-3. Click the borrow button (**+**), then click **Mượn** on the confirmation dialog.
-
-**Expected Result:**
-The borrow request is rejected with the correct error message: "Thành viên đang bị tạm ngưng. Không thể mượn sách."
-
-**Actual Result:**
-The interface displays a rejection message but with the content: **"Thành viên đã hết hạn. Không thể mượn sách."**
-
-**Impact:**
-Violates the requirement to state the exact reason for borrow rejection in the REQ-04 specification. Causes confusion to users as suspended members might mistake their account status for being expired.
-
-![Mismatched expired message shown for suspended member](../screenshots/TC-15_suspended_wrong_error.png)
-
-**Proposed Solution:**
-The system should maintain distinct error messages for each member account status. When a borrow is blocked due to a **suspended** account, the message must explicitly state "Tạm ngưng"; when blocked due to an **expired** account, it must state "Hết hạn". The two states must not be conflated.
 
 ---
 
@@ -144,7 +107,7 @@ The system should maintain distinct error messages for each member account statu
 | Attribute | Details |
 |-----------|---------|
 | **Bug ID** | BUG-03 |
-| **Related TC** | `TC-19` |
+| **Related TC** | `TC-25` |
 | **Related REQ** | `REQ-05` |
 | **Severity** | `Medium` |
 | **Reporter** | `Đỗ Minh Tấn` |
@@ -172,10 +135,49 @@ The book is returned successfully and its status updates to "Đã trả", but th
 **Impact:**
 Directly violates the core business requirement in REQ-05 (Book Return). The system cannot remind or notify members/librarians about overdue borrowing behavior.
 
-![Late return completed with no warning dialog alert](../screenshots/TC-19_return_overdue_no_alert.png)
+![Late return completed with no warning dialog alert](../screenshots/TC-25_return_overdue_no_alert.png)
 
 **Proposed Solution:**
 When a return is processed, the system must compare the return date against the due date. If the return is late, a warning notification showing the number of overdue days must be displayed before or immediately after confirming the return, as required by REQ-05.
+
+---
+
+## BUG-04
+
+| Attribute | Details |
+|-----------|---------|
+| **Bug ID** | BUG-04 |
+| **Related TC** | `TC-21` |
+| **Related REQ** | `REQ-04` |
+| **Severity** | `Medium` |
+| **Reporter** | `Đỗ Minh Tấn` |
+| **Date Discovered** | `25/05/2026` |
+| **Status** | `Open` |
+
+**Title:**
+System displays incorrect error message when a "Suspended" Member attempts to borrow a book (displays account expired message instead of suspended message).
+
+**Preconditions:**
+Use a suspended Member account (`cu.le@email.com` / `password123`).
+
+**Steps to Reproduce:**
+1. Log in with account `cu.le@email.com` / `password123`.
+2. On the **Sách** tab, locate an available book (e.g., `BOOK001`).
+3. Click the borrow button (**+**), then click **Mượn** on the confirmation dialog.
+
+**Expected Result:**
+The borrow request is rejected with the correct error message: "Thành viên đang bị tạm ngưng. Không thể mượn sách."
+
+**Actual Result:**
+The interface displays a rejection message but with the content: **"Thành viên đã hết hạn. Không thể mượn sách."**
+
+**Impact:**
+Violates the requirement to state the exact reason for borrow rejection in the REQ-04 specification. Causes confusion to users as suspended members might mistake their account status for being expired.
+
+![Mismatched expired message shown for suspended member](../screenshots/TC-21_suspended_wrong_error.png)
+
+**Proposed Solution:**
+The system should maintain distinct error messages for each member account status. When a borrow is blocked due to a **suspended** account, the message must explicitly state "Tạm ngưng"; when blocked due to an **expired** account, it must state "Hết hạn". The two states must not be conflated.
 
 ---
 
@@ -184,7 +186,7 @@ When a return is processed, the system must compare the return date against the 
 | Attribute | Details |
 |-----------|---------|
 | **Bug ID** | BUG-05 |
-| **Related TC** | `TC-27` |
+| **Related TC** | `TC-17` |
 | **Related REQ** | `REQ-03` |
 | **Severity** | `High` |
 | **Reporter** | `Dương Minh Đức` |
@@ -213,7 +215,7 @@ The system displays all books of the "Economy" genre, completely ignoring the "F
 **Impact:**
 Filtering logic is incorrect. Users cannot narrow down search results using genres, making it impossible to find specific books in large categories.
 
-![Search and filter logic failure](../screenshots/TC-27.png)
+![Search and filter logic failure](../screenshots/TC-17.png)
 
 **Proposed Solution:**
 The book search must apply both the keyword and the genre filter simultaneously as an AND condition — the result list should only contain books whose title/author matches the keyword AND whose genre matches the selected filter. The genre filter must not independently override the keyword search.
