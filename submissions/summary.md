@@ -52,7 +52,7 @@
 | Technique | Applied to which REQ? | Number of TCs Used | Explanation of Application |
 |----------|---------------------|---------------|------------------------|
 | EP (Equivalence Partitioning) | REQ-01, REQ-02, REQ-03, REQ-04, REQ-05, REQ-06, REQ-07, REQ-08 | 31 | Partitioning inputs into valid/invalid equivalence classes (e.g., book status, account roles, search keywords, member status, email format, record authorization). |
-| BVA (Boundary Value Analysis) | REQ-03, REQ-04, REQ-05 | 3 | Testing at critical boundary values (e.g., 100% exact title match in TC-24; attempting to borrow a 4th book when the limit of 3 is reached in TC-17). |
+| BVA (Boundary Value Analysis) | REQ-03, REQ-04, REQ-05 | 3 | Testing at critical boundary values (e.g., 100% exact title match in TC-16; attempting to borrow a 4th book when the limit of 3 is reached in TC-23). |
 
 ---
 
@@ -113,3 +113,4 @@
 | Claude | Documentation | Analyzed and summarized documentation, searched for specific terms in documents faster. |
 | Gemini | Content Migration & Refinement | Migrated and translated test cases/results from temp files to English, renumbered and aligned TC sequence, and synchronized all summary metrics across the submission files. |
 | Antigravity AI |  Verification | Verify validations, and capture evidence screenshots. |
+| Claude | Submission refinement | Fixed cross-document inconsistencies (malformed TC reference in BUG-01, a mismatched actual-result entry, bug-section ordering) and renumbered all test cases into a single contiguous sequence grouped by REQ, renaming evidence screenshots to match. All test results and findings are the team's own; no results were altered. |
