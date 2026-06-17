@@ -61,12 +61,12 @@ Chúng ta thường chia kiểm thử thành **Hộp đen** (Black-box — chỉ
 
    | # | Nguồn gốc | Test Value (Mô tả) | Dữ liệu cụ thể |
    |---|---|---|---|
-   | 1 | Từ SRS (Black-box) | `<!-- Nhóm tự điền -->` | |
-   | 2 | Từ SRS (Black-box) | | |
-   | 3 | Từ SRS (Black-box) | | |
-   | 4 | Từ Code (White-box) | | |
-   | 5 | Từ Code (White-box) | | |
-   | 6 | Từ Code (White-box) | | |
+   | 1 | Từ SRS (Black-box) | Thành viên hoạt động mượn sách có sẵn → thành công, phiếu mượn có thời hạn **14 ngày** | MEM002 (`ba.nguyen`) mượn BOOK001 — `dueDate = ngày_mượn + 14 ngày` |
+   | 2 | Từ SRS (Black-box) | Thành viên bị **tạm ngưng** mượn sách → từ chối, thông báo lỗi phân biệt "tạm ngưng" ≠ "hết hạn" | MEM004 (`cu.le`, Tạm ngưng) mượn BOOK001 → thông báo "đang bị tạm ngưng", không phải "hết hạn" |
+   | 3 | Từ SRS (Black-box) | Mượn sách đang được người khác giữ (trạng thái ≠ "Có sẵn") → từ chối | MEM003 mượn BOOK003 (đang được MEM002 giữ) → từ chối |
+   | 4 | Từ Code (White-box) | `memberId` không tồn tại → error "Không tìm thấy thành viên" (nhánh `member == null`) | Gọi mượn với `memberId = "MEMXXX"` (không có trong seed data) |
+   | 5 | Từ Code (White-box) | `bookId` không tồn tại → error "Không tìm thấy sách" (nhánh `book == null`) | Gọi mượn với `bookId = "BOOKXXX"` (không có trong seed data) |
+   | 6 | Từ Code (White-box) | Thành viên đang giữ **đúng 3 sách** (`currentBorrowCount = 3`) → từ chối do `>= maxBooksPerMember` (boundary value) | Thành viên đang có 3 phiếu `borrowing`, thử mượn sách thứ 4 → từ chối |
 
 4. **Câu hỏi thảo luận:**
 
